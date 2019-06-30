@@ -1,0 +1,13 @@
+#ip-pivot-table{
+  .reactPivot-paginate{
+    padding: 20px 0;
+  }
+  .reactPivot-pageNumber {
+    cursor: pointer;
+    padding: 5px;
+
+    &.is-selected{
+      border: 1px dashed #ddd;
+    }
+  }
+}
