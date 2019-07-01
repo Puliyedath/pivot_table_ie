@@ -14,7 +14,7 @@ const persisted = {
 function IPPivotTableContainer(WrappedComponent, elementId) {
 
   return class extends React.Component {
-    
+
     componentDidMount() {
       const props = this.props;
 

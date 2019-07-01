@@ -25,6 +25,13 @@ const stringifyQueryParams = (solo, activeDimensions) => {
 
 };
 
+history.listen((location, action) => {
+  if (action === 'POP') {
+    window.location.reload();
+  }
+
+});
+
 module.exports = {
   history,
   push,
