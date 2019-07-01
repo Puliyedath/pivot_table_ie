@@ -1,4 +1,14 @@
 #ip-pivot-table{
+  .reactPivot-csvExport{
+    display: none; /* the lib does not give a good enough api to hide this */
+  }
+
+  .reactPivot-dimensions > select{
+    &:nth-child(3) {
+      display:none;
+    }
+  }
+
   .reactPivot-paginate{
     padding: 20px 0;
   }

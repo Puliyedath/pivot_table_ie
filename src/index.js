@@ -1,12 +1,12 @@
 require('./styles/main.scss');
-import React from 'react';
-import { createLogger } from 'redux-logger';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './reducers';
+const React = require('react');
+const { createLogger } = require('redux-logger');
+const { render } = require('react-dom');
+const { Provider } = require('react-redux');
+const { createStore, applyMiddleware } = require('redux');
+const { rootReducer } = require('./reducers');
 
-import MainComponent from './components/MainComponent'
+const MainComponent = require('./components/MainComponent');
 
 const logger = createLogger();
 

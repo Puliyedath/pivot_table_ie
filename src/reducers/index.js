@@ -1,4 +1,8 @@
-import { combineReducers } from 'redux';
+const { combineReducers } = require('redux');
 
-export default combineReducers({});
+const rootReducer = combineReducers({});
+
+module.exports = {
+  rootReducer,
+}
 

@@ -1,13 +1,18 @@
-import React from 'react';
+const React = require('react');
+const { Router, Route } = require('react-router-dom');
+const { history } = require('./history');
+
 const IPPivotTable = require('./presentation/IPPivotTable');
 
 const MainComponent = (props) => {
   return (
     <React.Fragment>
       <h3 className="text-center">IP Pivot Table</h3>
-      <IPPivotTable />
+      <Router history={history}>
+        <Route path="/" component={IPPivotTable} />
+      </Router>
     </React.Fragment>
   )
 };
 
-export default MainComponent;
+module.exports = MainComponent;
