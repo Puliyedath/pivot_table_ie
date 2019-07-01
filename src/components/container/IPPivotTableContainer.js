@@ -39,7 +39,7 @@ function IPPivotTableContainer(WrappedComponent, elementId) {
         memo.count = (memo.count || 0) + 1 ;
         memo.totalBytes = (memo.totalBytes || 0) + parseInt(row.result.sum_bytes) ;
         return memo;
-      }
+      };
       
       const calculations = [{
         title: 'Total Bytes from Source',
@@ -56,7 +56,7 @@ function IPPivotTableContainer(WrappedComponent, elementId) {
         activeDimensions:persisted.activeDimensions,
         solo: persisted.solo,
         eventBus: bus,
-      })
+      });
 
       bus.on('solo', function(solo) {
         persisted.solo = {...solo} ;
