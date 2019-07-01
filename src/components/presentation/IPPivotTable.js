@@ -2,64 +2,14 @@ const React = require('react');
 const rows = require('../../traffic_bytes.js');
 const Emitter = require('wildemitter');
 const queryString = require('querystring');
+const { getActiveDimensions, getSolo, bus } = require('../../utils');
+const { SRC_IP_DIMENSION, DEST_IP_DIMENSION, PIVOT_DIMENSIONS } = require('../../constants');
 const { push } = require('../history');
 
-const SRC_IP_DIMENSION = 'SRC IP Address';
-const DEST_IP_DIMENSION = 'DEST IP Address';
-
-const PIVOT_DIMENSIONS = [SRC_IP_DIMENSION, DEST_IP_DIMENSION];
-
-window.persisted = {
-  solo: {},
-  activeDimensions: []
+const persisted = {
+  solo: getSolo(),
+  activeDimensions: getActiveDimensions(),
 };
-
-const bus = new Emitter;
-
-const getActiveDimensions = () => {
-  const params = new URLSearchParams(window.location.search);
-  let dimensions = params.get('dimensions') 
-  if (!dimensions) {
-    return [SRC_IP_DIMENSION];
-  }
-  
-  dimensions = dimensions.split(',');
-  const activeDimensions = []
-  if (dimensions[0] && PIVOT_DIMENSIONS.includes(dimensions[0])){
-    activeDimensions.unshift(DEST_IP_DIMENSION);
-  }
-  
-  if (dimensions[1] && PIVOT_DIMENSIONS.includes(dimensions[1])){
-    activeDimensions.push(SRC_IP_DIMENSION);
-  }
-  
-  console.log('activeDimensions is', activeDimensions);
-  return activeDimensions
-}
-
-const getSolo = () => {
-  const params = new URLSearchParams(window.location.search);
-  let solo = params.get('solo') ;
-
-  if(!solo) {
-    return {};
-  }
-
-  solo = solo.split(',');
-
-  const soloDict = solo.reduce((acc, s) => {
-    console.log('s' ,s)
-    const solo_entry = s.split(':');
-    acc[solo_entry[0]] = solo_entry[1];
-    return acc;
-  },{})
-
-  return soloDict;
-};
-
-window.persisted.activeDimensions = getActiveDimensions();
-window.persisted.solo = getSolo();
-
 
 class IPPivotTable extends React.Component {
 
@@ -111,16 +61,16 @@ class IPPivotTable extends React.Component {
     })
 
     bus.on('solo', function(solo) {
-      window.persisted.solo = {...solo} ;
+      persisted.solo = {...solo} ;
       let queryParams = {}
-      if (Object.keys(window.persisted.solo).length) {
-        queryParams.solo = Object.keys(window.persisted.solo).map(k => {
-          return `${k}:${window.persisted.solo[k]}`;
+      if (Object.keys(persisted.solo).length) {
+        queryParams.solo = Object.keys(persisted.solo).map(k => {
+          return `${k}:${persisted.solo[k]}`;
         }).join(',');
       }
 
-      if (Object.keys(window.persisted.activeDimensions).length) {
-        queryParams.dimensions = [ ...window.persisted.activeDimensions ].join(',');
+      if (Object.keys(persisted.activeDimensions).length) {
+        queryParams.dimensions = [ ...persisted.activeDimensions ].join(',');
       }
 
       if (queryParams) {
@@ -130,12 +80,12 @@ class IPPivotTable extends React.Component {
     });
 
     bus.on('activeDimensions', function(activeDimensions) {
-      window.persisted.activeDimensions = [...activeDimensions];
+      persisted.activeDimensions = [...activeDimensions];
 
       let queryParams = {};
-      if (Object.keys(window.persisted.solo).length) {
-        queryParams.solo = Object.keys(window.persisted.solo).map(k => {
-          return `${k}:${window.persisted.solo[k]}`;
+      if (Object.keys(persisted.solo).length) {
+        queryParams.solo = Object.keys(persisted.solo).map(k => {
+          return `${k}:${persisted.solo[k]}`;
         }).join(',')
       }
 
