@@ -1,7 +1,6 @@
 const React = require('react');
-const { push } = require('../history');
+const { push, stringifyQueryParams } = require('../history');
 const Emitter = require('wildemitter');
-const queryString = require('querystring');
 const rows = require('../../traffic_bytes.js');
 const { SRC_IP_DIMENSION, DEST_IP_DIMENSION, PIVOT_DIMENSIONS } = require('../../constants');
 const { getActiveDimensions, getSolo, bus } = require('../../utils');
@@ -36,20 +35,16 @@ function IPPivotTableContainer(WrappedComponent, elementId) {
         }
       ];
       
-      
       const reduce = function(row, memo) {
         memo.count = (memo.count || 0) + 1 ;
         memo.totalBytes = (memo.totalBytes || 0) + parseInt(row.result.sum_bytes) ;
         return memo;
       }
       
-      const calculations = [
-        {
-          title: 'Total Bytes from Source',
-          value: memo => memo.totalBytes,
-          
-        }
-      ];
+      const calculations = [{
+        title: 'Total Bytes from Source',
+        value: memo => memo.totalBytes,
+      }];
 
       ReactPivot(document.getElementById(elementId), {
         rows,
@@ -65,41 +60,12 @@ function IPPivotTableContainer(WrappedComponent, elementId) {
 
       bus.on('solo', function(solo) {
         persisted.solo = {...solo} ;
-        let queryParams = {}
-        if (Object.keys(persisted.solo).length) {
-          queryParams.solo = Object.keys(persisted.solo).map(k => {
-            return `${k}:${persisted.solo[k]}`;
-          }).join(',');
-        }
-
-        if (Object.keys(persisted.activeDimensions).length) {
-          queryParams.dimensions = [ ...persisted.activeDimensions ].join(',');
-        }
-
-        if (queryParams) {
-          push(`/?${queryString.stringify(queryParams)}`);
-        }
-
+        push(persisted);
       });
 
       bus.on('activeDimensions', function(activeDimensions) {
         persisted.activeDimensions = [...activeDimensions];
-
-        let queryParams = {};
-        if (Object.keys(persisted.solo).length) {
-          queryParams.solo = Object.keys(persisted.solo).map(k => {
-            return `${k}:${persisted.solo[k]}`;
-          }).join(',')
-        }
-
-        if (activeDimensions.length) {
-          queryParams.dimensions = [ ...activeDimensions ].join(',');
-        }
-
-        if (queryParams) {
-          push(`/?${queryString.stringify(queryParams)}`);
-        }
-
+        push(persisted);
       });
     }
 
