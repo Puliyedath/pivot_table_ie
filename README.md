@@ -2,7 +2,7 @@
   
 ### Project Pivot Table App Setup (script)
   * run the script 'launch_pivot_table.app.sh' from the project root folder
-    * bash launch_movie.search_app.sh
+    * bash launch_pivot_table.app.sh
 
 ### Project Pivot Table App Setup (Manual)
   * run 'npm run build:dev' - this will generate the resources in the dist folder
