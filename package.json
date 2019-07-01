@@ -8,8 +8,7 @@
     "build:dev": "webpack --mode development",
     "watch": "webpack --mode development --watch",
     "start:dev:server": "webpack-dev-server --open --mode development",
-    "dev_server:watch": "concurrently npm:start:dev:server npm:watch",
-    "integration:test": "jest"
+    "dev_server:watch": "concurrently npm:start:dev:server npm:watch"
   },
   "keywords": [],
   "author": "",
