@@ -12,3 +12,7 @@
 #### Details
   * On the initial lauch the user will be presented with two dropdowns that will allow them to slice the data based on src and destination ip.
   * Hovering on individual cells under the src and dest ip will present the user with a clickable link 'solo' where they can apply additional filter to the src and dest columns
+
+
+Note:
+  The library for the pivot table does not work with newer versions of webpack . Thats the reason why I had to work with a cdn resource.
